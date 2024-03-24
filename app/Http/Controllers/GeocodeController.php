@@ -2,11 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Geocoder\Exception\Exception;
-use Geocoder\Query\GeocodeQuery;
-use Geocoder\StatefulGeocoder;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use NominatimLaravel\Content\Nominatim;
 use NominatimLaravel\Exceptions\NominatimException;
 
@@ -21,7 +16,7 @@ class GeocodeController extends Controller
         $nominatim = new Nominatim($url);
 
         $search = $nominatim->newSearch();
-        $search->query("thies");
+        $search->query("dakar");
 
         $result = $nominatim->find($search);
 

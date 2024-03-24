@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\PermisController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VehiculeController;
+use App\Http\Controllers\LocationController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -23,9 +24,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('home.index');
-});
+Route::get('/', [App\Http\Controllers\HomeController::class, 'accueil']);
 
 Auth::routes();
 
@@ -77,7 +76,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function (){
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/geocoding', [\App\Http\Controllers\GeocodeController::class, 'geocode'])->name('geocoding');
-    Route::get('/location', [\App\Http\Controllers\LocationController::class, 'location'])->name('location');
+    Route::post('/location', [LocationController::class, 'location'])->name('location');
+    Route::post('/location/store', [LocationController::class, 'store'])->name('location.store');
 });
 

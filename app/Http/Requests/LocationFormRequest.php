@@ -24,9 +24,9 @@ class LocationFormRequest extends FormRequest
         return [
             'heure_depart' => ['required', 'string'],
             'lieu_depart' => ['required', 'string', 'max:255'],
-            'lieu_arrivee' => ['required', 'string', 'max:255'],
-            'date' => ['required', 'string'],
-            'type_voiture' => ['required', 'integer'],
+            'lieu_destination' => ['required', 'string', 'max:255'],
+            'date_location' => ['required', 'string'],
+            'type_vehicule' => ['required', 'integer'],
         ];
     }
 }
