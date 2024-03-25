@@ -61,7 +61,6 @@
         ])
     </div>
 
-    </div>
 </form>
 
 <!-- Modal -->
@@ -75,9 +74,9 @@
             <div class="modal-body" id="modal-body-content">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="save-location">Valider</button>
-                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal-location">
-                    Fermer <i class="bi bi-x"></i>
+                <button type="button" class="btn btn-sm btn-primary" id="save-location">Valider</button>
+                <button type="button" id="modal-close" class="btn btn-sm btn-danger" data-bs-dismiss="modal">
+                    Annuler <i class="bi bi-x"></i>
                 </button>
             </div>
         </div>
@@ -116,9 +115,14 @@
     });
 
     $(document).ready(function(){
+
+
+        $('#modal-close').click(function() {
+            $('#modal-location').modal('hide');
+        });
+
         $('#location-form').submit(function(event) {
             $('#loader').show();
-
             event.preventDefault(); // Empêche la soumission normale du formulaire
             const formData = $(this).serialize(); // Sérialiser les données du formulaire
             $.ajax({
@@ -128,6 +132,8 @@
                 success: function(response) {
                     // Manipuler la réponse de succès, par exemple, afficher un message de succès
                     let res;
+                    const modalLocationContent = $('#modal-body-content');
+                    const modalLocation = $('#modal-location');
                     if (response.success) {
                         res = response.success;
 
@@ -145,12 +151,13 @@
                             + "</div></div>";
 
                         locationContent = res.location;
-                        $('#modal-body-content').html(html);
+                        modalLocationContent.html(html);
                         $('#loader').hide();
-                        $('#modal-location').modal('show');
+                        modalLocation.modal('show');
 
                     } else {
-                        alert(response.error);
+                        const html = "<div class='alert alert-danger' role='alert'>" + response.error +"</div>";
+                        modalLocationContent.html(html);
                     }
                     // reset le formulaire
                     $('#location-form')[0].reset();
@@ -158,7 +165,10 @@
                 error: function(xhr, status, error) {
                     $('#loader').hide();
                     // Manipuler les erreurs, par exemple, afficher un message d'erreur
-                    alert('Erreur lors de la soumission du formulaire');
+                    const html = "<div class='alert alert-danger' role='alert'>Erreur: "
+                        + "Assurer vous que tous les cahmps ont été remplis</div>";
+                    $('#modal-body-content').html(html);
+                    $('#modal-location').modal('show');
                 }
             });
         });
@@ -174,18 +184,29 @@
         // Ajouter le token CSRF aux données de la location
         const jsonData = Object.assign({}, locationContent, {
             '_token': csrfToken
-        });
+        })
+        const modalLocation = $('#modal-location');
+
         $.ajax({
             type: 'POST',
             url: '/location/store', // URL de l'endpoint Laravel pour sauvegarder la location
             data: jsonData,
             success: function(response) {
-                // Manipuler la réponse de succès, par exemple, afficher un message de succès
-                alert('Location sauvegardée avec succès !');
+                if ( response.success ) {
+                    const html = "<div class='alert alert-success' role='alert'>"+ response.success +"</div>";
+                    $('#modal-body-content').html(html);
+                    modalLocation.modal('show');
+                } else {
+                    const html = "<div class='alert alert-danger' role='alert'>"+ response.error +"</div>";
+                    $('#modal-body-content').html(html);
+                    modalLocation.modal('show');
+                }
             },
             error: function(xhr, status, error) {
                 // Manipuler les erreurs, par exemple, afficher un message d'erreur
-                alert('Erreur lors de la sauvegarde de la location');
+                const html = "<div class='alert alert-danger' role='alert'>"+ response.error +"</div>";
+                $('#modal-body-content').html(html);
+                modalLocation.modal('show');
             }
         });
 

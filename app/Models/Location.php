@@ -103,4 +103,9 @@ class Location extends Model
         return $this->distanceHaversine(
             $coords1['lat'], $coords1['lon'], $coords2['lat'], $coords2['lon']);
     }
+
+    public function vehicule(): BelongsTo
+    {
+        return $this->belongsTo(Vehicule::class);
+    }
 }

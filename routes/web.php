@@ -31,6 +31,8 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/accueil', [App\Http\Controllers\HomeController::class, 'accueil'])->name('accueil');
+Route::get('/home/vehicules', [App\Http\Controllers\HomeController::class, 'vehicules'])
+    ->name('home.vehicules');
 
 Route::get('/dashboard', function (){
     return view('admin.dashboard');
@@ -78,5 +80,17 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function (){
 Route::middleware('auth')->group(function () {
     Route::post('/location', [LocationController::class, 'location'])->name('location');
     Route::post('/location/store', [LocationController::class, 'store'])->name('location.store');
+
+    Route::get('/locations/{client}/all', [LocationController::class, 'clientLocationsAll'])
+        ->name('location.client.all');
+    Route::get('/locations/{client}/last', [LocationController::class, 'clientLocationLast'])
+        ->name('location.client.last');
+
+    Route::get('/locations/{chauffeur}/all', [LocationController::class, 'chauffeurLocationsAll'])
+        ->name('location.chauffeur.all');
+    Route::get('/locations/{chauffeur}/last', [LocationController::class, 'chauffeurLocationLast'])
+        ->name('location.chauffeur.last');
+    Route::delete('/locations/{location}/destroy', [LocationController::class, 'destroy'])
+        ->name('location.destroy');
 });
 
