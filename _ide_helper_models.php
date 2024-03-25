@@ -87,6 +87,10 @@ namespace App\Models{
  * @property int|null $client_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $vehicule_id
+ * @property-read \App\Models\User|null $chauffeur
+ * @property-read \App\Models\User|null $client
+ * @property-read \App\Models\Vehicule|null $vehicule
  * @method static \Illuminate\Database\Eloquent\Builder|Location newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Location newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Location query()
@@ -101,6 +105,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Location whereLieuDestination($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Location wherePrixEstime($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Location whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Location whereVehiculeId($value)
  * @mixin \Eloquent
  */
 	#[\AllowDynamicProperties]
@@ -239,6 +244,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Contrat|null $contrat
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Location> $locations
+ * @property-read int|null $locations_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read \App\Models\PermisConduite|null $permisConduite

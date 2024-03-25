@@ -35,7 +35,18 @@ class HomeController extends Controller
      */
     public function accueil(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
+        $vehicules = Vehicule::with('user')->limit(6)->get();
         $categories = Vehicule::categories();
-        return view('home.index', compact('categories'));
+        return view('home.index', compact('categories', 'vehicules'));
     }
+
+    public function vehicules(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        $vehicules = Vehicule::with('user')
+            ->whereNotNull('user_id')
+            ->paginate(6);
+        $categories = Vehicule::categories();
+        return view('home.vehicules.index', compact('categories', 'vehicules'));
+    }
+
 }

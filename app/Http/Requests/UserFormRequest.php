@@ -29,7 +29,7 @@ class UserFormRequest extends FormRequest
             'nom' => ['required', 'string', self::MAX],
             'prenom' => ['required', 'string', self::MAX],
             'email' => ['required', 'string', 'email', self::MAX, Rule::unique('users')->ignore($this->user)],
-            'password' => ['nullable', 'string', 'min:8'],
+            'password' => ['nullable', 'password',  'string', 'min:8'],
             'confirm_password' => ['nullable', 'string', 'min:8', 'same:password'],
             'role_id' => ['nullable', 'integer', Rule::exists('roles', 'id')],
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],

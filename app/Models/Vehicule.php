@@ -82,4 +82,5 @@ class Vehicule extends Model
             ? Storage::disk('public')->url($this->image)
             : Storage::disk('public')->url('defaut-car.png');
     }
+
 }
