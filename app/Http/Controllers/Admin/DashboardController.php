@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Contrat;
+use App\Models\Location;
 use App\Models\Payement;
 use App\Models\User;
 use App\Models\Vehicule;
@@ -21,18 +22,30 @@ class DashboardController extends Controller
      */
     public function index(): Application|View|Factory|\Illuminate\Contracts\Foundation\Application
     {
+        $this->checkChauffeurs();
         $counts = $this->getCounts();
         $topChauffeurs = $this->getTopChauffeurs();
         $topClients = $this->getTopClients();
         $topVehicules = $this->getTopVehicules();
         $topPayements = $this->getTopPayements();
-        $todayTransactions = $this->getTodayTransactions();
+        $lastestLocations = $this->getLastestLocations();
         $montantTotalPayements = $this->getMontantTotalPayements();
         return view('admin.dashboard',
             compact('counts', 'topChauffeurs',
                 'topClients', 'topVehicules', 'topPayements',
-                'todayTransactions', 'montantTotalPayements')
+                'lastestLocations', 'montantTotalPayements')
         );
+    }
+
+    public function checkChauffeurs(): void
+    {
+        $chauffeurs = User::where('role_id', 3)->get();
+        foreach ($chauffeurs as $chauffeur) {
+            if ($chauffeur->status == 1 && (!$chauffeur->checkContratValidation() || !$chauffeur->checkExpiration())) {
+                $chauffeur->vehicule()->update(['user_id' => null]);
+                $chauffeur->update(['vehicule_id' => null]);
+            }
+        }
     }
 
     /**
@@ -44,9 +57,11 @@ class DashboardController extends Controller
         return [
             'chauffeurs' => User::where('role_id', 3)->count(),
             'clients' => User::where('role_id', 2)->count(),
+            'admins' => User::where('role_id', 1)->count(),
             'users' => User::count(),
             'contrats' => Contrat::count(),
             'vehicules' => Vehicule::count(),
+            'locations' => Location::count(),
         ];
     }
 
@@ -102,9 +117,11 @@ class DashboardController extends Controller
     /**
      * @return Payement[]|Builder[]|Collection
      */
-    public function getTodayTransactions(): Collection|array
+    public function getLastestLocations(): Collection|array
     {
-        return Payement::whereDate('created_at', date('Y-m-d'))->get();
+        return Location::with('chauffeur', 'client')
+            ->orderBy('created_at', 'desc')
+            ->take(10)->get();
     }
 
 }
