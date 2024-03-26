@@ -2,12 +2,12 @@
 <div class="col-md-6 col-lg-4 mb-4">
     <div class="listing d-block  align-items-stretch">
         <div class="listing-img h-100 mr-4">
-            <img src="{{ $location->vehicule?->getImage() }}" alt="Image" class="img-fluid">
+            <img src="{{ $location?->vehicule?->getImage() }}" alt="Image" class="img-fluid">
         </div>
         <div class="listing-contents h-100">
             <h3>Heure de depart : {{ date('H:i', strtotime($location->heure_depart)) }}</h3>
             <div class="rent-price">
-                <strong>Chauffeur : {{ $location->chauffeur?->getFullName() }}</strong>
+                <strong>Chauffeur : {{ $location?->chauffeur?->getFullName() }}</strong>
             </div>
             <div class="d-block d-md-flex mb-3 border-bottom pb-3">
                 <div class="listing-feature pr-4">

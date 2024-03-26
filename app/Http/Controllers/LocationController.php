@@ -149,7 +149,7 @@ class LocationController extends Controller
             $location = Location::where('chauffeur_id', $chauffeur->id)
                 ->whereNotNull('heure_arrivee')
                 ->orderBy('id', 'desc')->first();
-            return view('home.chauffeur.current-location', compact('location'));
+            return view('home.chauffeurs.current-location', compact('location'));
         } catch (Exception $ex) {
             return redirect() -> back()->with('error', $ex->getMessage());
         }

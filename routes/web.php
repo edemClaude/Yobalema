@@ -4,11 +4,13 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ChauffeurController;
 use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\ContratController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PayementController;
 use App\Http\Controllers\Admin\PermisController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VehiculeController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LocationController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -24,19 +26,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'accueil']);
+Route::get('/', [HomeController::class, 'accueil']);
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Route::get('/accueil', [App\Http\Controllers\HomeController::class, 'accueil'])->name('accueil');
-Route::get('/home/vehicules', [App\Http\Controllers\HomeController::class, 'vehicules'])
-    ->name('home.vehicules');
+Route::get('/accueil', [HomeController::class, 'accueil'])->name('accueil');
+Route::get('/home/vehicules', [HomeController::class, 'vehicules'])->name('home.vehicules');
 
-Route::get('/dashboard', function (){
-    return view('admin.dashboard');
-})->name('admin.dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->name('admin.dashboard')->middleware('auth');
 
 Route::prefix('admin')->name('admin.')->middleware('auth')->group(function (){
 
@@ -86,10 +86,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/locations/{client}/last', [LocationController::class, 'clientLocationLast'])
         ->name('location.client.last');
 
-    Route::get('/locations/{chauffeur}/all', [LocationController::class, 'chauffeurLocationsAll'])
+    Route::get('/locations/chauffeur/{chauffeur}/all', [LocationController::class, 'chauffeurLocationsAll'])
         ->name('location.chauffeur.all');
-    Route::get('/locations/{chauffeur}/last', [LocationController::class, 'chauffeurLocationLast'])
+    Route::get('/locations/chauffeur/{chauffeur}/last', [LocationController::class, 'chauffeurLocationLast'])
         ->name('location.chauffeur.last');
+
     Route::delete('/locations/{location}/destroy', [LocationController::class, 'destroy'])
         ->name('location.destroy');
 });
