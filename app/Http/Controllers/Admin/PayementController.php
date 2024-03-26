@@ -21,7 +21,9 @@ class PayementController extends Controller
      */
     public function index()
     {
-        //
+        $payements = Payement::with('location.client')
+            ->paginate(6);
+        return view('admin.payements.index', compact('payements'));
     }
 
     /**
