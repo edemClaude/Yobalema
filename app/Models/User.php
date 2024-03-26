@@ -192,4 +192,8 @@ class User extends Authenticatable
         return $this->hasMany(Location::class, 'client_id', 'id');
     }
 
+    public function notes(): HasMany
+    {
+        return $this->hasMany(Note::class);
+    }
 }

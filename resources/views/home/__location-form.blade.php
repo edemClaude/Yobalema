@@ -123,7 +123,7 @@
 
         $('#location-form').submit(function(event) {
             $('#loader').show();
-            event.preventDefault(); // Empêche la soumission normale du formulaire
+           // event.preventDefault(); // Empêche la soumission normale du formulaire
             const formData = $(this).serialize(); // Sérialiser les données du formulaire
             $.ajax({
                 type: 'POST',
@@ -133,7 +133,6 @@
                     // Manipuler la réponse de succès, par exemple, afficher un message de succès
                     let res;
                     const modalLocationContent = $('#modal-body-content');
-                    const modalLocation = $('#modal-location');
                     if (response.success) {
                         res = response.success;
 
@@ -153,7 +152,7 @@
                         locationContent = res.location;
                         modalLocationContent.html(html);
                         $('#loader').hide();
-                        modalLocation.modal('show');
+                        $('#modal-location').modal('show');
 
                     } else {
                         const html = "<div class='alert alert-danger' role='alert'>" + response.error +"</div>";

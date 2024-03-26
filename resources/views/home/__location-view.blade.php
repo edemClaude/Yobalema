@@ -24,12 +24,12 @@
                 </div>
             </div>
             <div>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos eos at eum, voluptatem quibusdam.</p>
-                <p><a href="#" class="btn btn-primary btn-sm">Rent Now</a></p>
                 <form class="d-inline" action="{{ route('location.destroy', $location) }}" method="POST">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger btn-sm">Annuler la location</button>
+                    <button type="submit" class="btn btn-danger btn-sm @disabled($location->heure_arrivee)">
+                        Annuler la location
+                    </button>
                 </form>
             </div>
         </div>

@@ -24,7 +24,7 @@ class DashboardController extends Controller
     {
         $this->checkChauffeurs();
         $counts = $this->getCounts();
-        $topChauffeurs = $this->getTopChauffeurs();
+        $topChauffeurs = $this->getChauffeurs();
         $topClients = $this->getTopClients();
         $topVehicules = $this->getTopVehicules();
         $topPayements = $this->getTopPayements();
@@ -67,12 +67,13 @@ class DashboardController extends Controller
 
     /**
      * Cette fonction permet de faire le top 5 des chauffeurs
-     * @return array
+     * @return Collection|array
      */
-    public function getTopChauffeurs(): array
+    public function getChauffeurs(): Collection|array
     {
-        return User::where('role_id', 3)
-            ->take(5)->get()->toArray();
+        return User::with('contrat', 'vehicule', 'notes')
+            ->whereNotNull('vehicule_id')
+            ->take(10)->get();
     }
 
     /**

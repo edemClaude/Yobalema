@@ -18,11 +18,30 @@
             </div>
             <div class="row">
                 @include('home.__location-view', ['location' => $location])
+                <div class="col-lg-5">
+                    <form action="{{ route('client.note.store') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="location_id" value="{{ $location->id }}">
+                        <input type="hidden" name="user_id" value="{{ $location?->chauffeur->id }}">
+                        <label for="note">Noté le chauffeur :</label>
+                        <select id="note" name="value">
+                            <option value="1">★</option>
+                            <option value="2">★★</option>
+                            <option value="3">★★★</option>
+                            <option value="4">★★★★</option>
+                            <option value="5">★★★★★</option>
+                        </select>
+                        <button type="submit">Soumettre</button>
+                    </form>
+                </div>
             </div>
 
+            @if(!$location->heure_arrivee)
             <div class="row">
                 {{-- Importer la vue de payement --}}
+                @include('home.clients.__payement-card', ['location' => $location])
             </div>
+            @endif
         </div>
     </div>
 

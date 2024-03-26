@@ -122,6 +122,8 @@ namespace App\Models{
  * @property int $location_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Location $location
+ * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|Note newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Note newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Note query()
@@ -149,6 +151,7 @@ namespace App\Models{
  * @property string $date
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Location $location
  * @method static \Illuminate\Database\Eloquent\Builder|Payement newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Payement newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Payement query()
@@ -233,7 +236,7 @@ namespace App\Models{
  * @property string $email
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string|null $image
- * @property string $password
+ * @property mixed $password
  * @property string|null $telephone
  * @property string|null $adresse
  * @property int $status
@@ -246,6 +249,8 @@ namespace App\Models{
  * @property-read \App\Models\Contrat|null $contrat
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Location> $locations
  * @property-read int|null $locations_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Note> $notes
+ * @property-read int|null $notes_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read \App\Models\PermisConduite|null $permisConduite

@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VehiculeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\NoteController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -93,5 +94,9 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('/locations/{location}/destroy', [LocationController::class, 'destroy'])
         ->name('location.destroy');
+
+    Route::post('/payements', [PayementController::class, 'store'])->name('client.payement.store');
+    Route::post('/notes', [NoteController::class, 'store'])->name('client.note.store');
+
 });
 

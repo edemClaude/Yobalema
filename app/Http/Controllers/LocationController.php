@@ -44,13 +44,16 @@ class LocationController extends Controller
             -> whereNotNull('user_id')
             -> where('status', 'DISPONIBLE')->first();
         if ($vehicule == null) {
-            return response()->json(
-                ['error' => 'Aucun véhicule disponible pour cette catégorie de véhicule ']
-            );
+//            return response()->json(
+//                ['error' => 'Aucun véhicule disponible pour cette catégorie de véhicule ']
+//            );
+            return redirect() -> back()
+                ->with('error', 'Aucun véhicule disponible pour cette catégorie de véhicule ');
+
         }
         $validated['vehicule_id'] = $vehicule->id;
         $validated['chauffeur_id'] = $vehicule->user_id;
-
+/*
         $datas = array(
             'vehicule_type' => $vehicule->category->name,
             'vehicule_image' => $vehicule->getImage(),
@@ -63,26 +66,33 @@ class LocationController extends Controller
             'date_location' => $validated['date_location'],
             'heure_depart' => $validated['heure_depart'],
             'location' => $validated
-        );
+        );*/
+        Location::create($validated);
+        $vehicule?->update(['status' => 'EN LOCATION']);
+        return redirect() -> route('location.client.last', Auth::user())
+            ->with('success', 'Location effectuee avec succes');
 
-        return response()->json(['success' => $datas]);
+        // return response()->json(['success' => $datas]);
     }
 
 
     /**
      * @param Request $request
-     * @return JsonResponse
+     * @return RedirectResponse
      */
-    public function store(Request $request): JsonResponse
+    public function store(Request $request): RedirectResponse
     {
         try {
             Location::create($request->all());
             $vehicule = Vehicule::find($request->input('vehicule_id'));
             $vehicule?->update(['status' => 'EN LOCATION']);
         }catch (Exception $ex) {
-            return response()->json(['error' => $ex->getMessage()]);
+            // return response()->json(['error' => $ex->getMessage()]);
+            return redirect() -> back()->with('error', $ex->getMessage());
         }
-        return response()->json(['success' => 'Location effectuee avec succes']);
+
+        //return response()->json(['success' => 'Location effectuee avec succes']);
+        return redirect() -> route('location.client.last')->with('success', 'Location effectuee avec succes');
     }
 
     /**
@@ -147,7 +157,6 @@ class LocationController extends Controller
     {
         try {
             $location = Location::where('chauffeur_id', $chauffeur->id)
-                ->whereNotNull('heure_arrivee')
                 ->orderBy('id', 'desc')->first();
             return view('home.chauffeurs.current-location', compact('location'));
         } catch (Exception $ex) {
